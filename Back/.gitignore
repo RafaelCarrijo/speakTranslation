@@ -13,6 +13,5 @@ test/
 *.vscode/
 .idea/
 *.log
-plataforma.log
 # Mac/OSX
 .DS_Store   

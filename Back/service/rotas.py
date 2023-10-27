@@ -1,10 +1,11 @@
 from fastapi.responses import JSONResponse, Response
 from fastapi import APIRouter, status
-from typing import Union, Optional, Dict
 from logs.mensagem import Mensagem
 from model.schema import RequestAudio, ResponseAudio
 from core.orquestrador import Orquestrador
+import whisper
 
+modelo = whisper.load_model("small")
 logger = Mensagem()
 
 
@@ -17,13 +18,10 @@ async def dialogo(resquest_bot: RequestAudio) -> AudioResponse:
     """
     
 
-    orquestrador = Orquestrador(resquest_bot)
+    orquestrador = Orquestrador(resquest_bot, modelo)
 
     try:
-        orquestrador.carregar_parametro
-        await orquestrador.intent_entidade
-        await orquestrador.processar_negocio()
-        await orquestrador.recuperar_acao()
+        await orquestrador.carregar_parametro()
         response = await orquestrador.output_mensagem()
 
         return response
