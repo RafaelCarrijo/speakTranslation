@@ -1,6 +1,8 @@
 
 from typing import Dict, Text
 from logs.mensagem import Mensagem
+from gtts import gTTS
+from io import BytesIO
 import whisper
 
 logger = Mensagem()
@@ -9,44 +11,65 @@ class Orquestrador():
 
     audio: Text
     linguagem: Text
-
-
     
-    def __init__(self, dados: Dict, modelo) -> None:
+    def __init__(self, dados: Dict, modelo: object) -> None:
         """Classe que orquestrar as funcionalidades do tradutor
         Args:
             Audio (Bytes): Audio na linguagem original
-            linguagem (Text): linguagem destino
+            Linguagem (Text): linguagem destino
+            Modelo (Classe): modelo carregado fora do request para aumentar performance
         """
         self.audio = dados.audio
         self.linguagem = dados.linguagem
         self.modelo = modelo
+        self.text = ""
+        self.stream = BytesIO()
 
-
-    def transcrever_audio(self) -> None:
-        """Transcreve o audio na linguagem solicitada
-        """  
-            
-        try:
-            self.audio = whisper.load_audio(self.audio) 
-            
-        except Exception as ex:
-            logger.mensagem_error(f"Erro: {ex}")
-            raise ex
-        
-
-    def detectar_idioma(self) -> None:
+    async def detectar_idioma(self) -> None:
         """Detecta o idioma original do audio
         """       
         try:
-            pass
+
+            #cortando o audio para deixar com apenas 30 segundos
+            audio = whisper.pad_or_trim(self.audio)
+            #trabalhando o audio de forma performatica para cada tipo de processador que estiver sendo utilizado
+            mel = whisper.log_mel_spectrogram(audio).to(self.model.device)
+
+            #detecta a linguagem com a maior probabilidade de ter sido utilizada no audio original
+            #criando um dicionario para facilitar o retorno da linguagem com maior probabilidade
+            _, probs = self.model.detect_language(mel)
+
+            #retorna apenas a linguagem detectada
+            return max(probs, key=probs.get)
+
         except Exception as ex:
             logger.mensagem_error(f"Erro: {ex}")
             raise ex        
 
 
-    async def output_mensagem(self) -> Dict:
-        return {
+    async def transcrever_audio(self) -> None:
+        """Transcreve o audio na linguagem solicitada
+        """  
             
-        }
+        try:
+            #utilizado o metodo tarnscribe direto para a linguagem destino.
+            #com ele podemos processar audios maiores que 30 segundos
+            self.text = self.model.transcribe(self.audio, language=self.linguagem)
+        except Exception as ex:
+            logger.mensagem_error(f"Erro: {ex}")
+            raise ex
+        
+
+
+    async def compila_audio(self) -> str:
+        
+        audio = gTTS(text=self.text, lang=self.linguagem, slow=False)
+        #usado stream para não precisar ficar salvando o arquivo antes de retornar ao cliente.
+        audio.write_to_fp(self.stream)
+        audio_bytes = self.stream.getvalue()
+
+
+        # Converta os bytes em uma string base64 para facilitar o acesso no cliente
+        return audio_bytes.encode('base64').decode('utf-8')
+        
 
