@@ -1,0 +1,80 @@
+/* Estilização da página */
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f0f0f0;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.container {
+  background-color: #fff;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  padding: 20px;
+  text-align: center;
+  width: 400px;
+}
+
+/* Estilização do componente de upload */
+.upload-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.upload-label {
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.upload-input {
+  border: 2px dashed #ccc;
+  border-radius: 5px;
+  padding: 20px;
+  text-align: center;
+  cursor: pointer;
+  transition: border 0.3s;
+}
+
+.upload-input:hover {
+  border: 2px dashed #007bff; /* Cor do contorno quando o mouse passa por cima */
+}
+
+/* Estilização do áudio traduzido */
+.audio-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.audio-label {
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.audio-player {
+  width: 100%;
+  max-width: 300px;
+  margin-top: 10px;
+}
+
+/* Botão de envio */
+.upload-button {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.upload-button:hover {
+  background-color: #0056b3; /* Cor do botão quando o mouse passa por cima */
+}

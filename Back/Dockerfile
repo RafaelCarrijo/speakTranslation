@@ -1,4 +1,4 @@
-FROM python:3.9
+FROM python:3.8
   
 WORKDIR /app
 
@@ -6,6 +6,8 @@ COPY * /app/
 
 RUN pip install -U pip 
 RUN pip install --no-cache-dir -r requirements.txt
+# unica forma de garantir que instala o whisper correto
+RUN pip install -U openai-whisper
 
 # Atualize o sistema e instale as dependências necessárias
 RUN apt-get update && apt-get install -y \
