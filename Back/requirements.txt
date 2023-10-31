@@ -6,3 +6,4 @@ uvicorn==0.23.2
 gTTS==2.4.0
 python_multipart==0.0.6
 python-ffmpeg==2.0.4
+ffmpeg-python==0.2.0
