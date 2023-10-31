@@ -19,5 +19,5 @@ Este é um aplicativo React que se conecta a um backend em FastAPI para traduzir
 - Execute os dois dockerfiles ou então localmente.
 - o react vai abrir uma tela para que seja feita o uploado do audio e a escolha da linguagem
   
-
+![Tela WEB](react.png)
 
