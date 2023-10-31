@@ -15,7 +15,7 @@ import numpy as np
 
 
 ssl._create_default_https_context = ssl._create_unverified_context
-modelo = whisper.load_model("small")
+modelo = whisper.load_model("medium")
 logger = Mensagem()
 router = APIRouter()
 
